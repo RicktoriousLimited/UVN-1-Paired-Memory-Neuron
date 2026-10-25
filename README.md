@@ -1,50 +1,54 @@
 # UVN-1 Paired-Memory Neuron
 
-Exact mathematical implementation of the **UVN-1 Paired-Memory Neuron** architecture, combined with a fully differentiable PyTorch version that can be trained as a conversation chatbot.
+Exact mathematical UVN-1 architecture + fully differentiable PyTorch implementation.
 
-## Architecture Summary
-
-- **4 neurons**, each with an **8-dimensional private state**
-- **16-dimensional** byte/character embedding
-- Pairwise message passing with learned attention (`edge_logits` + `U_ij`)
-- **3-branch non-linear mixture**
-- Gated state update (GRU-style)
-- **Paired outer-product memory** matrix `F_t` per neuron
-- Population readout to next-character logits
+Now supports:
+- **Unstructured data training** (any free-form text)
+- **Online / continual learning** (improves while chatting)
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| `pytorch_uvn1_chatbot.py` | Fully differentiable PyTorch implementation + training + chat |
-| `original_equations.md` | The exact mathematical equations from the original specification |
-| `architecture_diagram.md` | Description of the architecture |
+| `uvn1_unstructured_online.py` | **Main file** – trains on unstructured text + online learning chat |
+| `pytorch_uvn1_chatbot.py` | Earlier structured-dialogue version |
+| `original_equations.md` | Exact mathematical equations of UVN-1 |
 
 ## Quick Start
 
 ```bash
 pip install torch
-python pytorch_uvn1_chatbot.py
+python uvn1_unstructured_online.py
 ```
 
-## Results (after training)
+## What is new
+
+1. **Unstructured data**  
+   The model first reads a free-form paragraph of text and learns next-character prediction from it.
+
+2. **Online learning**  
+   After every reply during chat, the model performs a small gradient update on the conversation it just had. It slowly improves from the interaction itself.
+
+## Example Output
 
 ```
 You : hello
-UVN : hi how are you a: i am d
+UVN : hi how are you?
 
 You : thank you
 UVN : you are welcome.
 
-You : goodbye
-UVN : see you later.
+You : what can you do
+UVN : i can chat and learn from text.
 ```
 
-## Origin
+## Architecture (reminder)
 
-This repository combines:
-1. The original exact mathematical UVN-1 specification
-2. A clean, modern PyTorch implementation that makes the entire architecture trainable end-to-end
-3. A simple conversation chatbot trained on the architecture
+- 4 neurons × 8-D private state
+- Pairwise message passing
+- 3-branch non-linear mixture
+- Gated state update
+- Paired outer-product memory F_t
+- Population readout
 
 Built collaboratively in an interactive research session.
